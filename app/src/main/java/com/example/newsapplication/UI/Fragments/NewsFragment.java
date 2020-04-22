@@ -38,6 +38,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public static final String API_KEY = "8c66ce1dfb9245cf9fe9be0a484d713e";
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView.LayoutManager layoutManager;
     private List<Article> articles = new ArrayList<>();
     private NewsAdapter newsAdapter;
@@ -46,13 +47,16 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         recyclerView = view.findViewById(R.id.newsRecyclerView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        loadJson("");
+        onSwipeRefreshLoading("");
         setHasOptionsMenu(true);
 
         return view;
@@ -60,10 +64,22 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
+        loadJson("");
+    }
 
+    private void onSwipeRefreshLoading(final String searchedText) {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                loadJson(searchedText);
+            }
+        });
     }
 
     public void loadJson(String searchedText) {
+
+        swipeRefreshLayout.setRefreshing(true);
+
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<News> call;
         if (searchedText.isEmpty()) {
@@ -83,7 +99,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     newsAdapter = new NewsAdapter(articles, getContext());
                     recyclerView.setAdapter(newsAdapter);
                     newsAdapter.notifyDataSetChanged();
+
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
+                    swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No results", Toast.LENGTH_LONG).show();
                 }
             }
@@ -111,14 +130,14 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public boolean onQueryTextSubmit(String s) {
 
                 if (s.length() > 2) {
-                    loadJson(s);
+                    onSwipeRefreshLoading(s);
                 }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                loadJson(s);
+                onSwipeRefreshLoading(s);
                 return false;
             }
         });
