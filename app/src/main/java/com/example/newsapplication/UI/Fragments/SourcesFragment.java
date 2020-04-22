@@ -1,4 +1,4 @@
-package com.example.newsapplication.Fragments;
+package com.example.newsapplication.UI.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,13 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
-import com.example.newsapplication.CustomRecyclerViewAdapter;
+import com.example.newsapplication.Helpers.Adapters.SourcesAdapter;
 import com.example.newsapplication.Data.Models.SearchedSource;
 import com.example.newsapplication.Data.Models.SearchedSources;
 import com.example.newsapplication.Data.Network.ApiClient;
 import com.example.newsapplication.Data.Network.ApiInterface;
-import com.example.newsapplication.FeatureLinearLayoutManager;
-import com.example.newsapplication.FeaturedRecyclerView;
+import com.example.newsapplication.Helpers.SourceRecyclerViewSupport.FeatureLinearLayoutManager;
+import com.example.newsapplication.Helpers.SourceRecyclerViewSupport.FeaturedRecyclerView;
 import com.example.newsapplication.R;
 
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
-import static com.example.newsapplication.Fragments.NewsFragment.API_KEY;
+import static com.example.newsapplication.UI.Fragments.NewsFragment.API_KEY;
 
 public class SourcesFragment extends Fragment {
 
     List<SearchedSource> sources = new ArrayList<>();
     FeaturedRecyclerView featuredRecyclerView;
     FeatureLinearLayoutManager layoutManager;
-    CustomRecyclerViewAdapter adapter;
+    SourcesAdapter adapter;
 
     @Nullable
     @Override
@@ -68,7 +68,7 @@ public class SourcesFragment extends Fragment {
                         sources.clear();
                     }
                     sources = response.body().getSourceList();
-                    adapter = new CustomRecyclerViewAdapter(sources, getContext());
+                    adapter = new SourcesAdapter(sources, getContext());
                     featuredRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } else {

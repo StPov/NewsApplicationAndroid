@@ -1,4 +1,4 @@
-package com.example.newsapplication;
+package com.example.newsapplication.Helpers.Adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -22,18 +22,20 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.newsapplication.Data.Models.Article;
+import com.example.newsapplication.R;
+import com.example.newsapplication.Helpers.Utils;
 
 import java.util.List;
 
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder>{
 
     private List<Article> articles;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
 
-    public Adapter(List<Article> articles, Context context) {
+    public NewsAdapter(List<Article> articles, Context context) {
         this.articles = articles;
         this.context = context;
     }

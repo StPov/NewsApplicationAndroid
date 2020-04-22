@@ -1,4 +1,4 @@
-package com.example.newsapplication;
+package com.example.newsapplication.Helpers.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,11 +10,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newsapplication.Data.Models.SearchedSource;
+import com.example.newsapplication.Helpers.SourceRecyclerViewSupport.FeatureRecyclerViewAdapter;
+import com.example.newsapplication.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CustomRecyclerViewAdapter extends FeatureRecyclerViewAdapter<RecyclerView.ViewHolder> {
+public class SourcesAdapter extends FeatureRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
     private static final int ITEM_TYPE_FEATURED = 0;
     private static final int ITEM_TYPE_DUMMY = 1;
@@ -24,7 +26,7 @@ public class CustomRecyclerViewAdapter extends FeatureRecyclerViewAdapter<Recycl
 
     private Context context;
 
-    public CustomRecyclerViewAdapter(List<SearchedSource> data, Context context) {
+    public SourcesAdapter(List<SearchedSource> data, Context context) {
         this.data = data;
         this.context = context;
 

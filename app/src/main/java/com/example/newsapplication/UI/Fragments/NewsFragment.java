@@ -1,13 +1,15 @@
-package com.example.newsapplication.Fragments;
+package com.example.newsapplication.UI.Fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,11 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.newsapplication.Adapter;
+import com.example.newsapplication.Helpers.Adapters.NewsAdapter;
 import com.example.newsapplication.Data.Models.Article;
 import com.example.newsapplication.Data.Models.News;
 import com.example.newsapplication.Data.Network.ApiClient;
@@ -33,13 +34,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsFragment extends Fragment implements  SwipeRefreshLayout.OnRefreshListener{
+public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     public static final String API_KEY = "8c66ce1dfb9245cf9fe9be0a484d713e";
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<Article> articles = new ArrayList<>();
-    private Adapter adapter;
+    private NewsAdapter newsAdapter;
 
     @Nullable
     @Override
@@ -51,7 +52,8 @@ public class NewsFragment extends Fragment implements  SwipeRefreshLayout.OnRefr
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        loadJson();
+        loadJson("");
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -61,10 +63,14 @@ public class NewsFragment extends Fragment implements  SwipeRefreshLayout.OnRefr
 
     }
 
-    public void loadJson() {
+    public void loadJson(String searchedText) {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<News> call;
-        call = apiInterface.getNews("Sevastopol", API_KEY);
+        if (searchedText.isEmpty()) {
+            call = apiInterface.getNews("Sevastopol", API_KEY);
+        } else {
+            call = apiInterface.getNews(searchedText, API_KEY);
+        }
 
         call.enqueue(new Callback<News>() {
             @Override
@@ -74,9 +80,9 @@ public class NewsFragment extends Fragment implements  SwipeRefreshLayout.OnRefr
                         articles.clear();
                     }
                     articles = response.body().getArticles();
-                    adapter = new Adapter(articles, getContext());
-                    recyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    newsAdapter = new NewsAdapter(articles, getContext());
+                    recyclerView.setAdapter(newsAdapter);
+                    newsAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "No results", Toast.LENGTH_LONG).show();
                 }
@@ -87,5 +93,38 @@ public class NewsFragment extends Fragment implements  SwipeRefreshLayout.OnRefr
 
             }
         });
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.top_main_menu, menu);
+        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setQueryHint("Enter search request");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                if (s.length() > 2) {
+                    loadJson(s);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                loadJson(s);
+                return false;
+            }
+        });
+
+        searchMenuItem.getIcon().setVisible(false, false);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

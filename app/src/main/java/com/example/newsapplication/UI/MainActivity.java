@@ -1,4 +1,4 @@
-package com.example.newsapplication;
+package com.example.newsapplication.UI;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.newsapplication.Fragments.FavoritesFragment;
-import com.example.newsapplication.Fragments.NewsFragment;
-import com.example.newsapplication.Fragments.SourcesFragment;
+import com.example.newsapplication.UI.Fragments.FavoritesFragment;
+import com.example.newsapplication.UI.Fragments.NewsFragment;
+import com.example.newsapplication.UI.Fragments.SourcesFragment;
+import com.example.newsapplication.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

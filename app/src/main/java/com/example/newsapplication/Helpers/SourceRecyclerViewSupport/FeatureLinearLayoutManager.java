@@ -1,4 +1,4 @@
-package com.example.newsapplication;
+package com.example.newsapplication.Helpers.SourceRecyclerViewSupport;
 
 import android.content.Context;
 

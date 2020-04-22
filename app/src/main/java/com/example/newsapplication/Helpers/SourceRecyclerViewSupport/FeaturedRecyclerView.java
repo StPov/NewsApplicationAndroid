@@ -1,4 +1,4 @@
-package com.example.newsapplication;
+package com.example.newsapplication.Helpers.SourceRecyclerViewSupport;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,6 +8,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.newsapplication.R;
 
 public class FeaturedRecyclerView extends RecyclerView {
 
