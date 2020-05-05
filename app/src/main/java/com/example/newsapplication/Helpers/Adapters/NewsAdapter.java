@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +27,8 @@ import com.bumptech.glide.request.target.Target;
 import com.example.newsapplication.Data.Models.Article;
 import com.example.newsapplication.R;
 import com.example.newsapplication.Helpers.Utils;
+import com.example.newsapplication.UI.Fragments.NewsDetailFragment;
+import com.example.newsapplication.UI.MainActivity;
 
 import java.util.List;
 
@@ -124,7 +129,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder>{
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.onItemClick(v, getAdapterPosition());
+//            onItemClickListener.onItemClick(v, getAdapterPosition());
+            Toast.makeText(context, "" + getAdapterPosition(), Toast.LENGTH_LONG).show();
+//            MainActivity activity = (MainActivity) v.getContext();
+//            NewsDetailFragment fragment = new NewsDetailFragment();
+//            Article article = articles.get(getAdapterPosition());
+//            fragment.article = article;
+//            activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         }
     }
 }

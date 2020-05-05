@@ -76,6 +76,19 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    private void initListener() {
+        newsAdapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Article article = articles.get(position);
+
+                NewsDetailFragment newsDetailFragment = new NewsDetailFragment();
+                newsDetailFragment.article = article;
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newsDetailFragment).addToBackStack(null).commit();
+            }
+        });
+    }
+
     public void loadJson(String searchedText) {
 
         swipeRefreshLayout.setRefreshing(true);
